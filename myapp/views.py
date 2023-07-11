@@ -8,6 +8,9 @@ from django.shortcuts import render
 from .confluenceintegration.list_files import list_files
 from .confluenceintegration.cleanup_file import cleanup_file
 from .confluenceintegration.create_page import create_page
+from .autodoc.main import autodoc
+
+
 
 
          
@@ -31,30 +34,32 @@ def home(request):
             child.sendline('export OPENAI_API_KEY="{0}"'.format(openai_api_key))
             time.sleep(1)
 
-            child.sendline('git clone {0}'.format(repo_url))
-            time.sleep(5)
+            #child.sendline('git clone {0}'.format(repo_url))
+            #time.sleep(5)
 
-            child.sendline('cd {0}'.format(repo_name))
-            time.sleep(1)
+            #child.sendline('cd {0}'.format(repo_name))
+            #time.sleep(1)
 
-            child.sendline('doc init')
+            #child.sendline('doc init')
 
             # Update expect calls to match exact prompts, or use more generic patterns
-            child.expect('Enter the name of your repository[:]?')  # Use regex to allow optional colon at the end
-            child.sendline(repo_name)
+            #child.expect('Enter the name of your repository[:]?')  # Use regex to allow optional colon at the end
+            #child.sendline(repo_name)
 
-            child.expect('Enter the GitHub URL of your repository[:]?')
-            child.sendline(repo_url)
+            #child.expect('Enter the GitHub URL of your repository[:]?')
+            #child.sendline(repo_url)
 
-            child.expect('Select which LLMs you have access to')
-            child.sendline('GPT-3.5 Turbo')
-            time.sleep(5)
+            #child.expect('Select which LLMs you have access to')
+            #child.sendline('GPT-3.5 Turbo')
+            #time.sleep(5)
 
-            child.sendline('doc index')
-            child.expect('Do you want to continue with indexing\?')  # Escape question mark
-            child.sendline('Yes')
-            time.sleep(80)
-            print(child.before.decode())
+            #child.sendline('doc index')
+            #child.expect('Do you want to continue with indexing\?')  # Escape question mark
+            #child.sendline('Yes')
+            #time.sleep(80)
+            #print(child.before.decode())
+            autodoc(repo_url)
+         
 
 
             files  = list_files(directory)
