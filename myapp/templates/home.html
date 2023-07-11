@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Repo Cloner</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .bg {
+            background-color: #000066;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        label, input {
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        input[type="text"] {
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg">
+        <div class="container">
+            <form method="post" action="/">
+                {% csrf_token %}
+                <label for="repo_name">Repo Name:</label>
+                <input type="text" id="repo_name" name="repo_name">
+                <label for="repo_url">Repo URL:</label>
+                <input type="text" id="repo_url" name="repo_url">
+                <label for="email">Confluence email:</label>
+                <input type="text" id="email" name="email">
+                <label for="username">Confluence Username:</label>
+                <input type="text" id="username" name="username">
+                <label for="password">Confluence API Key</label>
+                <input type="text" id="password" name="password">
+                <label for="spacekey">Confluence Space Key</label>
+                <input type="text" id="spacekey" name="spacekey">
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
