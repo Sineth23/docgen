@@ -20,7 +20,8 @@ from utils import clean_and_tokenize
 
 
 def generate_documentation(repo_path, llm_chain, model_name, repo_name, github_url, file_type_counts, filenames):
-    extensions = ['txt', 'md', 'markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
+    #extensions = ['txt', 'md', 'markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
+    extensions = ['txt','markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
 
     for ext in extensions:
         glob_pattern = f'**/*.{ext}'
@@ -176,12 +177,12 @@ def main5():
     generate_documentation(local_path, llm_chain, model_name, repo_dir, github_url, file_type_counts, filenames)
 
     # After generating the documentations, check if README.md exists
-    readme_path = os.path.join(repo_dir, 'README.md')
-    if not os.path.exists(readme_path):
-        # If README.md doesn't exist, create it
-        with open(readme_path, 'w') as readme_file:
-            readme_content = "This is the generated README for this repository."
-            readme_file.write(readme_content)
+   # readme_path = os.path.join(repo_dir, 'README.md')
+   # if not os.path.exists(readme_path):
+   #     # If README.md doesn't exist, create it
+   #     with open(readme_path, 'w') as readme_file:
+   #         readme_content = "This is the generated README for this repository."
+   #         readme_file.write(readme_content)
 
     # Ask the user questions and search the index
     while True:
