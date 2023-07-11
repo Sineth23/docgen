@@ -19,46 +19,6 @@ from utils import clean_and_tokenize
 
 
 
-def generate_documentation(repo_path, llm_chain, model_name, repo_name, github_url, file_type_counts, filenames):
-    #extensions = ['txt', 'md', 'markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
-    extensions = ['txt','markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
-
-    for ext in extensions:
-        glob_pattern = f'**/*.{ext}'
-        try:
-            loader = None
-            if ext == 'ipynb':
-                loader = NotebookLoader(str(repo_path), include_outputs=True, max_output_length=20, remove_newline=True)
-            else:
-                loader = DirectoryLoader(repo_path, glob=glob_pattern)
-
-            loaded_documents = loader.load() if callable(loader.load) else []
-            if loaded_documents:
-                for doc in loaded_documents:
-                    file_path = doc.metadata['source']
-                    relative_path = os.path.relpath(file_path, repo_path)
-                    # Don't generate documentation for existing README files
-                    if relative_path.lower() == 'readme.md':
-                        continue
-                    doc_text = clean_and_tokenize(doc.page_content)
-                    markdown_filename = os.path.basename(relative_path) + '.md'
-                    with open(os.path.join(repo_name, markdown_filename), 'w') as md_file:
-                        # Generate documentation using the language model
-                        doc_content = llm_chain.run(
-                            model=model_name,
-                            question="Explain this code, and the purpose of each function in the file",
-                            context=doc_text,
-                            repo_name=repo_name,
-                            github_url=github_url,
-                            conversation_history="",
-                            numbered_documents="",
-                            file_type_counts=file_type_counts,
-                            filenames=filenames
-                        )
-                        md_file.write(doc_content)
-        except Exception as e:
-            print(f"Error loading files with pattern '{glob_pattern}': {e}")
-            continue
 
 
 def count_tokens(text):
@@ -145,7 +105,49 @@ def autodoc(github_url):
         else:
             print("Failed to clone the repository.")
 
-def main5():
+def generate_documentation(repo_path, llm_chain, model_name, repo_name, github_url, file_type_counts, filenames):
+    #extensions = ['txt', 'md', 'markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
+    extensions = ['txt','markdown', 'rst', 'py', 'js', 'java', 'c', 'cpp', 'cs', 'go', 'rb', 'php', 'scala', 'html', 'htm', 'xml', 'json', 'yaml', 'yml', 'ini', 'toml', 'cfg', 'conf', 'sh', 'bash', 'css', 'scss', 'sql', 'gitignore', 'dockerignore', 'editorconfig', 'ipynb']
+
+    for ext in extensions:
+        glob_pattern = f'**/*.{ext}'
+        try:
+            loader = None
+            if ext == 'ipynb':
+                loader = NotebookLoader(str(repo_path), include_outputs=True, max_output_length=20, remove_newline=True)
+            else:
+                loader = DirectoryLoader(repo_path, glob=glob_pattern)
+
+            loaded_documents = loader.load() if callable(loader.load) else []
+            if loaded_documents:
+                for doc in loaded_documents:
+                    file_path = doc.metadata['source']
+                    relative_path = os.path.relpath(file_path, repo_path)
+                    # Don't generate documentation for existing README files
+                    if relative_path.lower() == 'readme.md':
+                        continue
+                    doc_text = clean_and_tokenize(doc.page_content)
+                    markdown_filename = os.path.basename(relative_path) + '.md'
+                    with open(os.path.join(repo_name, markdown_filename), 'w') as md_file:
+                        # Generate documentation using the language model
+                        doc_content = llm_chain.run(
+                            model=model_name,
+                            question="Explain this code, and the purpose of each function in the file",
+                            context=doc_text,
+                            repo_name=repo_name,
+                            github_url=github_url,
+                            conversation_history="",
+                            numbered_documents="",
+                            file_type_counts=file_type_counts,
+                            filenames=filenames
+                        )
+                        md_file.write(doc_content)
+        except Exception as e:
+            print(f"Error loading files with pattern '{glob_pattern}': {e}")
+            continue
+
+
+def main4():
     load_dotenv()
 
     # Define the model and the prompt template
