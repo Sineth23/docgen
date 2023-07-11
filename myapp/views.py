@@ -11,7 +11,8 @@ from .confluenceintegration.create_page import create_page
 from .autodoc.main import autodoc
 
 
-
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
          
 @csrf_exempt
